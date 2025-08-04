@@ -9,7 +9,7 @@
   <title>🎲 جدول الضرب للأطفال</title>
   <style>
     body {
-      font-family: 'Comic Sans MS', 'Arial', sans-serif;
+      font-family: 'Cairo', 'Comic Sans MS', 'Arial', sans-serif;
       background-color: #fef6e4;
       text-align: center;
       padding: 8px;
@@ -36,10 +36,10 @@
       color: white;
     }
     #result {
-      font-size: 1em;
+      font-size: 1.2em;
       background: #222;
       color: #0f0;
-      padding: 2px;
+      padding: 4px;
       border-radius: 10px;
       margin: 10px auto;
       width: 95%;
@@ -107,22 +107,26 @@
       justify-content: center;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 10px;
+      margin-top: 15px;
     }
     .quiz-option {
       background: #1982c4;
       color: white;
       border-radius: 8px;
-      padding: 8px 18px;
-      font-size: 2.2em;
+      padding: 6px 14px;
+      font-size: 1.8em;
       cursor: pointer;
       transition: background 0.3s;
     }
     .quiz-option:hover { background: #f96d00; }
-    #scoreboard { font-size: 4.4em; margin-top: 8px; }
-    #quiz-question { font-size: 4em; margin:10px; }
-
-    /* ⭐ Footer as long marquee ⭐ */
+    #scoreboard {
+      font-size: 2em;
+      margin-top: 8px;
+    }
+    #quiz-question {
+      font-size: 3em;
+      margin: 10px;
+    }
     .footer {
       background: linear-gradient(90deg, #c0c0c0, #dcdcdc, #c0c0c0);
       padding: 6px 0;
@@ -179,7 +183,7 @@
   <div id="quiz-question">?</div>
   <div class="quiz-options" id="quiz-options"></div>
   <div id="quiz-feedback" style="margin-top:8px; font-size:1.1em;"></div>
-  <div id="scoreboard">✅ صحيحة: 0 | ❌ خاطئة: 0</div>
+  <div id="scoreboard">✅ صحيحة: <span>0</span> | ❌ خاطئة: <span>0</span></div>
   <button class="reset-btn" onclick="nextQuiz()">➡️ سؤال جديد</button>
   <button class="reset-btn back-btn" onclick="endQuiz()">🏠 عودة للتدريب</button>
 </div>
@@ -187,7 +191,7 @@
 <!-- الأصوات محليًا -->
 <audio id="sound-clap" src="clap.mp3"></audio>
 <audio id="sound-wrong" src="wrong.mp3"></audio>
-<!-- التذييل -->
+
 <div class="footer">
   <div class="footer-content">
     <span class="footer-text">محمود عادل صالح - معلم رياضيات</span>
@@ -204,8 +208,10 @@ const leftGroup=document.getElementById('left');
 const rightGroup=document.getElementById('right');
 const soundClap=document.getElementById('sound-clap');
 const soundWrong=document.getElementById('sound-wrong');
+
 function toArabic(n){ return n.toString().replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]); }
 function fromNumber(n){ return useArabic?toArabic(n):n; }
+
 function createNumberButtons(){
   leftGroup.innerHTML=''; rightGroup.innerHTML='';
   for(let i=1;i<=10;i++){
@@ -217,11 +223,13 @@ function createNumberButtons(){
     });
   }
 }
+
 function selectNumber(side,btn,num){
   if(side==='left'){ if(leftSelected) leftSelected.classList.remove('selected'); leftSelected=btn; }
   else { if(rightSelected) rightSelected.classList.remove('selected'); rightSelected=btn; }
   btn.classList.add('selected'); showResult();
 }
+
 function showResult(){
   if(leftSelected && rightSelected){
     let ln=parseInt(leftSelected.textContent.replace(/[٠-٩]/g,d=>'0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]));
@@ -229,12 +237,14 @@ function showResult(){
     document.getElementById('result').innerHTML=`<p>${fromNumber(ln)}×${fromNumber(rn)}=${fromNumber(ln*rn)}</p>`;
   }
 }
+
 function resetScreen(){
   if(leftSelected) leftSelected.classList.remove('selected');
   if(rightSelected) rightSelected.classList.remove('selected');
   leftSelected=rightSelected=null;
   document.getElementById('result').innerHTML='<p>🥳 اختر الأرقام!</p>';
 }
+
 function switchLang(arabic){
   useArabic=arabic;
   document.body.style.direction=useArabic?'rtl':'ltr';
@@ -242,14 +252,16 @@ function switchLang(arabic){
   document.getElementById('btn-en').style.background=!useArabic?'green':'red';
   createNumberButtons(); resetScreen();
 }
+
 function startQuiz(){
   document.querySelector('.numbers-wrapper').style.display='none';
   document.getElementById('result').style.display='none';
   document.querySelectorAll('.reset-btn')[0].style.display='none';
   document.querySelectorAll('.reset-btn')[1].style.display='none';
   document.getElementById('quiz-section').style.display='block';
-  correctCount=wrongCount=0; nextQuiz();
+  correctCount=0; wrongCount=0; updateScoreboard(); nextQuiz();
 }
+
 function endQuiz(){
   document.querySelector('.numbers-wrapper').style.display='flex';
   document.getElementById('result').style.display='block';
@@ -257,10 +269,11 @@ function endQuiz(){
   document.querySelectorAll('.reset-btn')[1].style.display='inline-block';
   document.getElementById('quiz-section').style.display='none';
 }
+
 function nextQuiz(){
   quizLeft=Math.ceil(Math.random()*10); quizRight=Math.ceil(Math.random()*10);
   correctAnswer=quizLeft*quizRight;
-  let qText=`${fromNumber(quizLeft)}×${fromNumber(quizRight)}=${useArabic?'؟':'?'}`;
+  let qText=useArabic ? `؟ ${fromNumber(quizLeft)}×${fromNumber(quizRight)}` : `${fromNumber(quizLeft)}×${fromNumber(quizRight)} = ?`;
   document.getElementById('quiz-question').textContent=qText;
   let options=[correctAnswer];
   while(options.length<3){
@@ -272,6 +285,7 @@ function nextQuiz(){
     `<div class="quiz-option" onclick="checkQuiz(${n})">${fromNumber(n)}</div>`).join('');
   document.getElementById('quiz-feedback').textContent='';
 }
+
 function checkQuiz(n){
   if(n===correctAnswer){
     correctCount++; soundClap.play();
@@ -281,8 +295,14 @@ function checkQuiz(n){
     document.getElementById('quiz-feedback').textContent=`❌ خطأ! الصح هو ${fromNumber(correctAnswer)}`;
     document.getElementById('quiz-feedback').style.color='red';
   }
-  document.getElementById('scoreboard').textContent=`✅ صحيحة: ${fromNumber(correctCount)} | ❌ خاطئة: ${fromNumber(wrongCount)}`;
+  updateScoreboard();
 }
+
+function updateScoreboard(){
+  document.getElementById('scoreboard').innerHTML = 
+    `✅ صحيحة: <span>${fromNumber(correctCount)}</span> | ❌ خاطئة: <span>${fromNumber(wrongCount)}</span>`;
+}
+
 createNumberButtons(); switchLang(true);
 </script>
 
