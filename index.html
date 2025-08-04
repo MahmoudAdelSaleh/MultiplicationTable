@@ -231,7 +231,7 @@ function showResult(){
     timeBar.style.width='100%';
     let width=100;
     let interval=setInterval(()=>{
-      width-=5;
+      width-=1.33;
       timeBar.style.width=width+'%';
       if(width<=0){
         clearInterval(interval);
