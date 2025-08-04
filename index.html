@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#fca311">
+<link rel="icon" sizes="192x192" href="icon-192.png">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎲 جدول الضرب للأطفال</title>
+<style>
+  body {
+    font-family: 'Comic Sans MS', 'Arial', sans-serif;
+    background-color: #fef6e4;
+    text-align: center;
+    padding: 10px;
+    margin: 0;
+    direction: rtl;
+  }
+  .title-box {
+    display: inline-block;
+    background: linear-gradient(90deg, #ff914d, #fca311, #ff914d);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 15px;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  }
+  .lang-btn {
+    margin: 5px;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    color: white;
+  }
+  #result {
+    font-size: 1em; /* صغرنا الخط للنصف تقريبًا */
+    background: #222;
+    color: #0f0;
+    padding: 2px;
+    border-radius: 10px;
+    margin: 10px auto;
+    width: 95%;
+    max-width: 500px;
+    box-shadow: inset 0 0 8px #0f0, 0 0 10px rgba(0,0,0,0.4);
+    word-wrap: break-word;
+  }
+  .numbers-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    gap: 10px;
+  }
+  .group-box {
+    background: #fff;
+    border: 2px solid #1982c4;
+    border-radius: 10px;
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 160px;
+  }
+  .num {
+    background: #1982c4;
+    color: white;
+    border-radius: 8px;
+    margin: 3px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .num.selected {
+    background: #ff914d;
+    font-size: 1.5em;
+  }
+  .operator-box {
+    font-size: 2.2em;
+    color: #333;
+    user-select: none;
+  }
+  .reset-btn {
+    margin: 6px auto;
+    background: #ff914d;
+    color: white;
+    font-size: 1em;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    display: inline-block;
+  }
+  .reset-btn:hover {
+    background: #f96d00;
+  }
+  .back-btn {
+    background: #1982c4;
+  }
+  .back-btn:hover {
+    background: #0e5a8a;
+  }
+  .quiz-options {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .quiz-option {
+    background: #1982c4;
+    color: white;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .quiz-option:hover {
+    background: #f96d00;
+  }
+  #scoreboard {
+    font-size: 1.1em;
+    margin-top: 8px;
+  }
+  #quiz-question {
+    font-size: 2em;
+    margin:10px;
+  }
+  .footer {
+    background: linear-gradient(90deg, #c0c0c0, #dcdcdc, #c0c0c0);
+    padding: 4px;
+    margin-top: 10px;
+    overflow: hidden;
+    height: 30px;
+  }
+  .footer-content {
+    display: inline-block;
+    animation: scroll-right 12s linear infinite;
+    font-size: 1.1em;
+  }
+  .footer-text {
+    color: gold;
+    text-shadow: 1px 1px 2px black, 0 0 5px gold;
+    margin-right: 10px;
+  }
+  .footer-content a img {
+    vertical-align: middle;
+    margin: 0 6px;
+    width: 22px;
+    height: 22px;
+    filter: drop-shadow(1px 1px 1px black) brightness(1.1);
+    transition: transform 0.3s;
+  }
+  .footer-content a img:hover {
+    transform: scale(1.2);
+  }
+  @keyframes scroll-right {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+</style>
+</head>
+<body>
+
+<div class="title-box">✨ جدول الضرب للأطفال ✨</div>
+<div>
+  <button id="btn-ar" class="lang-btn" onclick="switchLang(true)">١٢٣</button>
+  <button id="btn-en" class="lang-btn" onclick="switchLang(false)">123</button>
+</div>
+<div id="result"><p>🥳 اختر الأرقام!</p></div>
+
+<div class="numbers-wrapper">
+  <div class="group-box" id="left"></div>
+  <div class="operator-box">×</div>
+  <div class="group-box" id="right"></div>
+</div>
+
+<button class="reset-btn" onclick="resetScreen()">🔄 مسح الشاشة</button>
+<button class="reset-btn" onclick="startQuiz()">🚀 ابدأ الاختبار</button>
+
+<div id="quiz-section" style="display:none;">
+  <div class="title-box">🧪 اختبار الحفظ</div>
+  <div id="quiz-question">?</div>
+  <div class="quiz-options" id="quiz-options"></div>
+  <div id="quiz-feedback" style="margin-top:8px; font-size:1.1em;"></div>
+  <div id="scoreboard">✅ صحيحة: 0 | ❌ خاطئة: 0</div>
+  <button class="reset-btn" onclick="nextQuiz()">➡️ سؤال جديد</button>
+  <button class="reset-btn back-btn" onclick="endQuiz()">🏠 عودة للتدريب</button>
+</div>
+
+<!-- الأصوات -->
+<audio id="sound-clap" src="https://www.soundjay.com/human/applause-8.mp3"></audio>
+<audio id="sound-wrong" src="https://www.soundjay.com/button/beep-10.mp3"></audio>
+
+<!-- التذييل -->
+<div class="footer">
+  <div class="footer-content">
+    <span class="footer-text">محمود عادل صالح - معلم رياضيات</span>
+    <a href="https://www.facebook.com/share/16vNKvdAze/" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"></a>
+    <a href="https://wa.me/201552402913" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png"></a>
+    <a href="mailto:mahmoudadelsaleh@gmail.com"><img src="https://cdn-icons-png.flaticon.com/512/732/732200.png"></a>
+  </div>
+</div>
+
+<script>
+let useArabic=true;
+let leftSelected=null,rightSelected=null;
+let correctCount=0,wrongCount=0;
+let quizLeft=0,quizRight=0,correctAnswer=0;
+const leftGroup=document.getElementById('left');
+const rightGroup=document.getElementById('right');
+const soundClap=document.getElementById('sound-clap');
+const soundWrong=document.getElementById('sound-wrong');
+
+function toArabic(n){ return n.toString().replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]); }
+function fromNumber(n){ return useArabic?toArabic(n):n; }
+
+function createNumberButtons(){
+  leftGroup.innerHTML=''; rightGroup.innerHTML='';
+  for(let i=1;i<=10;i++){
+    ['left','right'].forEach(side=>{
+      let btn=document.createElement('div');
+      btn.className='num';
+      btn.textContent=fromNumber(i);
+      btn.onclick=()=>{ selectNumber(side,btn,i); };
+      (side==='left'?leftGroup:rightGroup).appendChild(btn);
+    });
+  }
+}
+function selectNumber(side,btn,num){
+  if(side==='left'){
+    if(leftSelected) leftSelected.classList.remove('selected');
+    leftSelected=btn;
+  }else{
+    if(rightSelected) rightSelected.classList.remove('selected');
+    rightSelected=btn;
+  }
+  btn.classList.add('selected');
+  showResult();
+}
+function showResult(){
+  if(leftSelected && rightSelected){
+    let ln=parseInt(leftSelected.textContent.replace(/[٠-٩]/g,d=>'0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]));
+    let rn=parseInt(rightSelected.textContent.replace(/[٠-٩]/g,d=>'0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]));
+    document.getElementById('result').innerHTML=`<p>${fromNumber(ln)}×${fromNumber(rn)}=${fromNumber(ln*rn)}</p>`;
+  }
+}
+function resetScreen(){
+  if(leftSelected) leftSelected.classList.remove('selected');
+  if(rightSelected) rightSelected.classList.remove('selected');
+  leftSelected=rightSelected=null;
+  document.getElementById('result').innerHTML='<p>🥳 اختر الأرقام!</p>';
+}
+function switchLang(arabic){
+  useArabic=arabic;
+  document.body.style.direction=useArabic?'rtl':'ltr';
+  document.getElementById('btn-ar').style.background=useArabic?'green':'red';
+  document.getElementById('btn-en').style.background=!useArabic?'green':'red';
+  createNumberButtons();
+  resetScreen();
+}
+function startQuiz(){
+  document.querySelector('.numbers-wrapper').style.display='none';
+  document.getElementById('result').style.display='none';
+  document.querySelectorAll('.reset-btn')[0].style.display='none';
+  document.querySelectorAll('.reset-btn')[1].style.display='none';
+  document.getElementById('quiz-section').style.display='block';
+  correctCount=wrongCount=0;
+  nextQuiz();
+}
+function endQuiz(){
+  document.querySelector('.numbers-wrapper').style.display='flex';
+  document.getElementById('result').style.display='block';
+  document.querySelectorAll('.reset-btn')[0].style.display='inline-block';
+  document.querySelectorAll('.reset-btn')[1].style.display='inline-block';
+  document.getElementById('quiz-section').style.display='none';
+}
+function nextQuiz(){
+  quizLeft=Math.ceil(Math.random()*10); quizRight=Math.ceil(Math.random()*10);
+  correctAnswer=quizLeft*quizRight;
+  let qText=`${fromNumber(quizLeft)}×${fromNumber(quizRight)}=${useArabic?'؟':'?'}`;
+  document.getElementById('quiz-question').textContent=qText;
+  let options=[correctAnswer];
+  while(options.length<3){
+    let w=correctAnswer+(Math.floor(Math.random()*5)-2);
+    if(w>0 && !options.includes(w)) options.push(w);
+  }
+  options.sort(()=>Math.random()-0.5);
+  document.getElementById('quiz-options').innerHTML=options.map(n=>
+    `<div class="quiz-option" onclick="checkQuiz(${n})">${fromNumber(n)}</div>`
+  ).join('');
+  document.getElementById('quiz-feedback').textContent='';
+}
+function checkQuiz(n){
+  if(n===correctAnswer){
+    correctCount++;
+    soundClap.play();
+    document.getElementById('quiz-feedback').textContent='✅ أحسنت!';
+    document.getElementById('quiz-feedback').style.color='green';
+  }else{
+    wrongCount++;
+    soundWrong.play();
+    document.getElementById('quiz-feedback').textContent=`❌ خطأ! الصح هو ${fromNumber(correctAnswer)}`;
+    document.getElementById('quiz-feedback').style.color='red';
+  }
+  document.getElementById('scoreboard').textContent=`✅ صحيحة: ${fromNumber(correctCount)} | ❌ خاطئة: ${fromNumber(wrongCount)}`;
+}
+createNumberButtons();
+switchLang(true);
+</script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+    .then(() => console.log('Service Worker Registered'));
+  }
+  </script>
+</body>
+</html>
