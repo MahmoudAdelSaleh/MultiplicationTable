@@ -4,8 +4,7 @@
   "start_url": ".",
   "display": "standalone",
   "background_color": "#fef6e4",
-  "theme_color": "#fca311",
-  "description": "تطبيق تفاعلي لتعليم جدول الضرب للأطفال - إعداد: محمود عادل صالح",
+  "theme_color": "#1982c4",
   "icons": [
     {
       "src": "icon-192.png",
@@ -17,15 +16,5 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ],
-  "screenshots": [
-    {
-      "src": "splash.png",
-      "sizes": "1024x1024",
-      "type": "image/png",
-      "label": "Splash Screen"
-    }
-  ],
-  "orientation": "portrait",
-  "lang": "ar"
+  ]
 }
