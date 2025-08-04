@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#fca311">
-<link rel="icon" sizes="192x192" href="icon-192.png">
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🎲 جدول الضرب للأطفال</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#fca311">
+<link rel="icon" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-512.png">
+
 <style>
   body {
     font-family: 'Comic Sans MS', 'Arial', sans-serif;
@@ -36,7 +38,7 @@
     color: white;
   }
   #result {
-    font-size: 1em; /* صغرنا الخط للنصف تقريبًا */
+    font-size: 1em;
     background: #222;
     color: #0f0;
     padding: 2px;
@@ -137,15 +139,15 @@
   }
   .footer {
     background: linear-gradient(90deg, #c0c0c0, #dcdcdc, #c0c0c0);
-    padding: 4px;
+    padding: 6px;
     margin-top: 10px;
     overflow: hidden;
-    height: 30px;
+    height: 40px;
   }
   .footer-content {
     display: inline-block;
-    animation: scroll-right 12s linear infinite;
-    font-size: 1.1em;
+    animation: scroll-right 10s linear infinite;
+    font-size: 1.2em;
   }
   .footer-text {
     color: gold;
@@ -155,8 +157,8 @@
   .footer-content a img {
     vertical-align: middle;
     margin: 0 6px;
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     filter: drop-shadow(1px 1px 1px black) brightness(1.1);
     transition: transform 0.3s;
   }
@@ -197,11 +199,9 @@
   <button class="reset-btn back-btn" onclick="endQuiz()">🏠 عودة للتدريب</button>
 </div>
 
-<!-- الأصوات -->
 <audio id="sound-clap" src="https://www.soundjay.com/human/applause-8.mp3"></audio>
 <audio id="sound-wrong" src="https://www.soundjay.com/button/beep-10.mp3"></audio>
 
-<!-- التذييل -->
 <div class="footer">
   <div class="footer-content">
     <span class="footer-text">محمود عادل صالح - معلم رياضيات</span>
@@ -317,11 +317,11 @@ function checkQuiz(n){
 createNumberButtons();
 switchLang(true);
 </script>
-  <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-    .then(() => console.log('Service Worker Registered'));
-  }
-  </script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+  .then(() => console.log('Service Worker Registered'));
+}
+</script>
 </body>
 </html>
