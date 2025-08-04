@@ -17,5 +17,15 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "screenshots": [
+    {
+      "src": "splash.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "label": "Splash Screen"
+    }
+  ],
+  "orientation": "portrait",
+  "lang": "ar"
 }
