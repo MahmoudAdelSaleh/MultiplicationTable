@@ -7,6 +7,7 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1982c4">
 <style>
+/* CSS Styles */
 body {
   font-family: 'Cairo', sans-serif;
   background-color: #fef6e4;
@@ -19,11 +20,17 @@ body {
   position: fixed; top: 0; width: 100%; background: #1982c4; display: flex; z-index: 999;
 }
 .top-tabs button {
-  flex: 1; color: white; padding: 10px; font-size: 1em; border: none; background: #1982c4;
+  flex: 1; color: white; padding: 10px; font-size: 1.2em; border: none; background: #1982c4; cursor: pointer; transition: background 0.3s;
+}
+.top-tabs button:hover {
+  background: #f96d00;
+}
+.top-tabs button.active-tab {
+  background: #ff914d;
 }
 #time-bar, #quiz-time-bar {
   position: fixed; top: 45px; left: 0; height: 10px; background: green; width: 0%; z-index: 1000;
-  border-radius: 4px;
+  border-radius: 4px; transition: width linear;
 }
 .title-box {
   display: inline-block;
@@ -58,35 +65,125 @@ body {
   background: #1982c4; color: white; border-radius: 8px; margin: 3px;
   width: 40px; height: 40px; display: flex; justify-content: center; align-items: center;
   font-size: 1.2em; cursor: pointer; transition: all 0.2s; font-weight: bold;
+  user-select: none;
 }
-.num.selected { background: #ff914d; font-size: 1.5em; }
+.num:hover {
+  background: #f96d00; transform: scale(1.1);
+}
+.num.selected { background: #ff914d; font-size: 1.5em; transform: scale(1.2); }
 .operator-box {
   font-size: 4em; font-weight: bold; margin: 0 20px;
   animation: rotateY 2s linear infinite;
+  user-select: none;
 }
 @keyframes rotateY {
   0% { transform: rotateY(0deg); }
   100% { transform: rotateY(360deg); }
 }
 .tab { display: none; }
+.tab.active { display: block; }
 .reset-btn {
   background: #1982c4; color: white; border-radius: 8px; padding: 6px 12px;
-  margin-top: 10px; cursor: pointer; border: none; font-size: 1em;
+  margin-top: 10px; cursor: pointer; border: none; font-size: 1em; transition: background 0.3s;
 }
-.quiz-options { display: flex; justify-content: center; gap: 10px; margin: 10px auto; max-width: 90%; }
+.reset-btn:hover {
+  background: #f96d00;
+}
+.quiz-options {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px auto;
+  max-width: 90%;
+  flex-wrap: nowrap; /* Force single row for options */
+  overflow-x: auto; /* Allow horizontal scrolling if content overflows */
+  padding-bottom: 10px; /* Add some padding for scrollbar if needed */
+}
 .quiz-option {
-  background: #1982c4; color: white; border-radius: 8px; padding: 6px 12px;
-  font-size: 1.8em; cursor: pointer; flex: 1; transition: background 0.3s;
+  background: #1982c4;
+  color: white;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 1.8em;
+  cursor: pointer;
+  flex: 1;
+  transition: background 0.3s, transform 0.2s;
+  min-width: 80px;
+  text-align: center;
+  display: flex; /* Ensure content inside is centered */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
-.quiz-option:hover { background: #f96d00; }
+.quiz-option:hover { background: #f96d00; transform: scale(1.05); }
+.quiz-option.clicked {
+  pointer-events: none;
+}
+.quiz-option.correct {
+  background-color: green!important;
+}
+.quiz-option.wrong {
+  background-color: red!important;
+}
+
+/* New styles for the separate score display container */
+#quiz-score-display {
+  display: flex;
+  flex-wrap: wrap; /* Allows wrapping into multiple rows */
+  justify-content: center;
+  gap: 8px; /* Space between dots */
+  margin-top: 20px; /* Space below quiz options */
+  padding: 10px;
+  background-color: #e0f2f7; /* Light background for distinction */
+  border-radius: 10px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+}
+
+/* Styles for individual score dots */
+.score-dot {
+  width: 20px; /* Slightly larger for visibility */
+  height: 20px;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  display: flex; /* For centering potential icons later if needed */
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8em; /* For potential icons */
+  color: white;
+}
+
+.score-dot.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.score-dot.correct {
+  background-color: #4CAF50; /* Green */
+}
+
+.score-dot.wrong {
+  background-color: #F44336; /* Red */
+}
+
+.score-dot.timeout {
+  background-color: #FFC107; /* Yellow */
+}
+
 #quiz-question { margin-top:10px; font-size:2em; }
 .footer {
   background: linear-gradient(90deg, #c0c0c0, #dcdcdc, #c0c0c0);
   padding: 6px 0; overflow: hidden; height: 40px; width: 100%; position: fixed; bottom: 0;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
 }
 .footer-content {
   white-space: nowrap;
-  animation: scroll-right 10s linear infinite;
+  animation: scroll-right 15s linear infinite;
   font-size: 1.2em;
 }
 @keyframes scroll-right {
@@ -111,12 +208,12 @@ body {
 <div id="quiz-time-bar"></div>
 
 <div class="top-tabs">
-  <button onclick="openTab('tab-train')">🎲 تدريب</button>
-  <button onclick="openTab('tab-quiz')">🧪 اختبار</button>
-  <button onclick="openTab('tab-settings')">⚙️ إعدادات</button>
+  <button id="tab-train-btn" class="active-tab" onclick="openTab('tab-train', this)">🎲 تدريب</button>
+  <button id="tab-quiz-btn" onclick="openTab('tab-quiz', this)">🧪 اختبار</button>
+  <button id="tab-settings-btn" onclick="openTab('tab-settings', this)">⚙️ إعدادات</button>
 </div>
 
-<div class="tab" id="tab-train" style="display:block;">
+<div class="tab active" id="tab-train">
   <div class="title-box">جدول الضرب للأطفال</div>
   <div class="lang-toggle">
     <button id="btn-ar" class="lang-btn active" onclick="switchLang(true)">١٢٣</button>
@@ -137,6 +234,7 @@ body {
   <div class="quiz-options" id="quiz-options"></div>
   <div id="quiz-feedback" style="margin-top:8px; font-size:1.1em;"></div>
   <div id="score-text">✅ 0 | ❌ 0 | 0%</div>
+  <div id="quiz-score-display"></div>
   <div style="margin-top:10px;">
     <button class="reset-btn" onclick="selectLevel('مبتدئ')">مبتدئ</button>
     <button class="reset-btn" onclick="selectLevel('نشيط')">نشيط</button>
@@ -159,9 +257,9 @@ body {
 <div class="footer">
   <div class="footer-content">
     <span class="footer-text">محمود عادل صالح - معلم رياضيات</span>
-    <a href="https://m.facebook.com/barghouthean/" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"></a>
-    <a href="https://wa.me/201552402912" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png"></a>
-    <a href="mailto:mahmoudadelsaleh@gmail.com"><img src="https://cdn-icons-png.flaticon.com/512/732/732200.png"></a>
+    <a href="https://m.facebook.com/barghouthean/" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="فيسبوك"></a>
+    <a href="https://wa.me/201552402912" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="واتساب"></a>
+    <a href="mailto:mahmoudadelsaleh@gmail.com"><img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="بريد إلكتروني"></a>
   </div>
 </div>
 
@@ -172,155 +270,262 @@ body {
 // service worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('service-worker.js')
-    .then(reg => console.log('Service Worker registered:', reg.scope))
-    .catch(err => console.error('Service Worker error:', err));
+  .then(reg => console.log('Service Worker registered:', reg.scope))
+  .catch(err => console.error('Service Worker error:', err));
 }
+
 let useArabic = true;
 let leftSelected = null, rightSelected = null;
-let quizLeft = 0, quizRight = 0, correctAnswer = 0;
-let correctCount = 0, wrongCount = 0, currentQuestion = 0;
-let totalQuestions = 10, questionTimeout = 6000;
-let questionTimer;
+let quiz = {
+  left: 0,
+  right: 0,
+  correctAnswer: 0,
+  correctCount: 0,
+  wrongCount: 0,
+  currentQuestion: 0,
+  totalQuestions: 10,
+  questionTimeout: 6000,
+  questionTimer: null
+};
+
+// DOM elements cache
 const leftGroup = document.getElementById('left');
 const rightGroup = document.getElementById('right');
 const timeBar = document.getElementById('time-bar');
 const quizTimeBar = document.getElementById('quiz-time-bar');
+const resultDisplay = document.getElementById('result');
+const quizQuestionDisplay = document.getElementById('quiz-question');
+const quizOptionsDisplay = document.getElementById('quiz-options');
+const quizFeedbackDisplay = document.getElementById('quiz-feedback');
+const scoreTextDisplay = document.getElementById('score-text');
+const quizScoreDisplay = document.getElementById('quiz-score-display'); // New: Score display container
 const soundClap = document.getElementById('sound-clap');
 const soundWrong = document.getElementById('sound-wrong');
 
-function toArabic(n) { return n.toString().replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]); }
-function fromNumber(n) { return useArabic ? toArabic(n) : n; }
+// Utility functions
+const toArabic = n => n.toString().replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+const fromNumber = n => useArabic? toArabic(n) : n;
 
+// Tab management
+function openTab(tabId, btn) {
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  document.querySelectorAll('.top-tabs button').forEach(b => b.classList.remove('active-tab'));
+  btn.classList.add('active-tab');
+  if (tabId === 'tab-quiz') {
+    // Optionally stop any training timers when switching to quiz
+    if (window.showResultInterval) clearInterval(window.showResultInterval);
+    timeBar.style.width = '0%';
+  }
+}
+
+// Language switching
 function switchLang(arabic) {
-  useArabic=arabic;
-  document.getElementById('btn-ar').className= arabic?'lang-btn active':'lang-btn inactive';
-  document.getElementById('btn-en').className= !arabic?'lang-btn active':'lang-btn inactive';
-  document.body.style.direction= arabic?'rtl':'ltr';
+  useArabic = arabic;
+  document.getElementById('btn-ar').className = arabic? 'lang-btn active' : 'lang-btn inactive';
+  document.getElementById('btn-en').className =!arabic? 'lang-btn active' : 'lang-btn inactive';
+  document.body.style.direction = arabic? 'rtl' : 'ltr';
   createNumberButtons();
   resetScreen();
 }
 
-function openTab(tabId){
-  document.querySelectorAll('.tab').forEach(tab=>tab.style.display='none');
-  document.getElementById(tabId).style.display='block';
-}
-
-function createNumberButtons(){
-  leftGroup.innerHTML=''; rightGroup.innerHTML='';
-  for(let i=1;i<=10;i++){
-    ['left','right'].forEach(side=>{
-      let btn=document.createElement('div');
-      btn.className='num'; btn.textContent=fromNumber(i);
-      btn.onclick=()=>{ selectNumber(side,btn,i); };
-      (side==='left'?leftGroup:rightGroup).appendChild(btn);
+// Training tab logic
+function createNumberButtons() {
+  leftGroup.innerHTML = '';
+  rightGroup.innerHTML = '';
+  for (let i = 1; i <= 10; i++) {
+    ['left', 'right'].forEach(side => {
+      let btn = document.createElement('div');
+      btn.className = 'num';
+      btn.textContent = fromNumber(i);
+      btn.addEventListener('click', () => selectNumber(side, btn, i));
+      (side === 'left'? leftGroup : rightGroup).appendChild(btn);
     });
   }
 }
 
-function selectNumber(side,btn,num){
-  if(side==='left'){ if(leftSelected) leftSelected.classList.remove('selected'); leftSelected=btn; }
-  else{ if(rightSelected) rightSelected.classList.remove('selected'); rightSelected=btn; }
-  btn.classList.add('selected'); showResult();
+function selectNumber(side, btn, num) {
+  // Reset previous selection for the same side
+  if (side === 'left') {
+    if (leftSelected) leftSelected.classList.remove('selected');
+    leftSelected = btn;
+  } else {
+    if (rightSelected) rightSelected.classList.remove('selected');
+    rightSelected = btn;
+  }
+  btn.classList.add('selected');
+  showResult();
 }
 
-function showResult(){
-  if(leftSelected && rightSelected){
-    let ln=parseInt(leftSelected.textContent.replace(/[٠-٩]/g,d=>'0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]));
-    let rn=parseInt(rightSelected.textContent.replace(/[٠-٩]/g,d=>'0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]));
-    document.getElementById('result').innerHTML=`<p>${fromNumber(ln)} × ${fromNumber(rn)} = ${fromNumber(ln*rn)}</p>`;
-    timeBar.style.width='100%';
-    let width=100;
-    let interval=setInterval(()=>{
-      width-=1.33;
-      timeBar.style.width=width+'%';
-      if(width<=0){
-        clearInterval(interval);
-        resetScreen();
-        timeBar.style.width='0%';
-      }
-    },40);
+function showResult() {
+  if (leftSelected && rightSelected) {
+    let ln = parseInt(leftSelected.textContent.replace(/[٠-٩]/g, d => '0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]));
+    let rn = parseInt(rightSelected.textContent.replace(/[٠-٩]/g, d => '0123456789'['٠١٢٣٤٥٦٩٨٩'.indexOf(d)]));
+    resultDisplay.innerHTML = `<p>${fromNumber(ln)} × ${fromNumber(rn)} = ${fromNumber(ln * rn)}</p>`;
+    // Reset and start new timer
+    if (window.showResultInterval) clearInterval(window.showResultInterval);
+    timeBar.style.transition = 'none';
+    timeBar.style.width = '100%';
+    setTimeout(() => {
+      timeBar.style.transition = 'width 3s linear';
+      timeBar.style.width = '0%';
+      window.showResultInterval = setTimeout(() => resetScreen(), 3000);
+    }, 10);
   }
 }
 
-function resetScreen(){
-  if(leftSelected) leftSelected.classList.remove('selected');
-  if(rightSelected) rightSelected.classList.remove('selected');
-  leftSelected=rightSelected=null;
-  document.getElementById('result').innerHTML='<p>🥳 اختر الأرقام!</p>';
+function resetScreen() {
+  if (leftSelected) leftSelected.classList.remove('selected');
+  if (rightSelected) rightSelected.classList.remove('selected');
+  leftSelected = rightSelected = null;
+  resultDisplay.innerHTML = '<p>🥳 اختر الأرقام!</p>';
+  timeBar.style.transition = 'none';
+  timeBar.style.width = '0%';
+  if (window.showResultInterval) clearTimeout(window.showResultInterval);
 }
 
-function selectLevel(level){
-  if(level==='مبتدئ'){ totalQuestions=10; questionTimeout=6000; }
-  else if(level==='نشيط'){ totalQuestions=20; questionTimeout=4000; }
-  else if(level==='ذكي'){ totalQuestions=30; questionTimeout=3000; }
-  else if(level==='عبقري'){ totalQuestions=40; questionTimeout=2000; }
-  document.getElementById('level-selected').textContent=level;
+// Quiz tab logic
+function selectLevel(level) {
+  const levels = {
+    'مبتدئ': { totalQuestions: 10, timeout: 6000 },
+    'نشيط': { totalQuestions: 20, timeout: 4000 },
+    'ذكي': { totalQuestions: 30, timeout: 3000 },
+    'عبقري': { totalQuestions: 40, timeout: 2000 }
+  };
+  quiz.totalQuestions = levels[level].totalQuestions;
+  quiz.questionTimeout = levels[level].timeout;
+  document.getElementById('level-selected').textContent = level;
 }
 
-function startQuiz(){
-  correctCount=wrongCount=currentQuestion=0;
+function startQuiz() {
+  quiz.correctCount = 0;
+  quiz.wrongCount = 0;
+  quiz.currentQuestion = 0;
+  scoreTextDisplay.textContent = `✅ 0 | ❌ 0 | 0%`;
+  quizFeedbackDisplay.textContent = '';
+  quizScoreDisplay.innerHTML = ''; // Clear score dots at quiz start
   nextQuiz();
 }
 
-function nextQuiz(){
-  if(currentQuestion>=totalQuestions){
+function nextQuiz() {
+  clearTimeout(quiz.questionTimer);
+  if (quiz.currentQuestion >= quiz.totalQuestions) {
     showQuizResult();
     return;
   }
-  currentQuestion++;
-  quizLeft=Math.ceil(Math.random()*10); quizRight=Math.ceil(Math.random()*10);
-  correctAnswer=quizLeft*quizRight;
-  let qText=useArabic?`${fromNumber(quizLeft)} × ${fromNumber(quizRight)} = ؟`:`${quizLeft} × ${quizRight} = ?`;
-  document.getElementById('quiz-question').textContent=qText;
-  document.getElementById('quiz-feedback').textContent='';
-  let options=[correctAnswer];
-  while(options.length<3){
-    let fake=correctAnswer+(Math.floor(Math.random()*5)-2);
-    if(fake>0 && !options.includes(fake)) options.push(fake);
+
+  // Clear previous classes from options
+  document.querySelectorAll('.quiz-option.correct,.quiz-option.wrong').forEach(option => {
+    option.classList.remove('correct', 'wrong');
+  });
+
+  quiz.currentQuestion++;
+  quiz.left = Math.ceil(Math.random() * 10);
+  quiz.right = Math.ceil(Math.random() * 10);
+  quiz.correctAnswer = quiz.left * quiz.right;
+  
+  const qText = useArabic? `${fromNumber(quiz.left)} × ${fromNumber(quiz.right)} = ؟` : `${quiz.left} × ${quiz.right} =?`;
+  quizQuestionDisplay.textContent = qText;
+  quizFeedbackDisplay.textContent = '';
+
+  const options = [quiz.correctAnswer];
+  while (options.length < 3) {
+    let fake = quiz.correctAnswer + (Math.floor(Math.random() * 5) - 2);
+    if (fake > 0 &&!options.includes(fake)) {
+      options.push(fake);
+    }
   }
-  options.sort(()=>Math.random()-0.5);
-  document.getElementById('quiz-options').innerHTML=options.map(n=>
-    `<div class="quiz-option" onclick="checkQuiz(${n}, this)">${fromNumber(n)}</div>`).join('');
-  quizTimeBar.style.width='100%';
-  animateBar(quizTimeBar, questionTimeout);
-  questionTimer=setTimeout(()=>{ checkQuiz(null); },questionTimeout);
+  options.sort(() => Math.random() - 0.5);
+
+  // Options HTML without internal feedback containers
+  quizOptionsDisplay.innerHTML = options.map(n =>
+    `<div class="quiz-option" onclick="checkQuiz(${n}, this)">
+        ${fromNumber(n)}
+    </div>`).join('');
+  
+  // Animate quiz timer
+  quizTimeBar.style.transition = 'none';
+  quizTimeBar.style.width = '100%';
+  setTimeout(() => {
+    quizTimeBar.style.transition = `width ${quiz.questionTimeout / 1000}s linear`;
+    quizTimeBar.style.width = '0%';
+    quiz.questionTimer = setTimeout(() => checkQuiz(null), quiz.questionTimeout);
+  }, 10);
 }
 
-function checkQuiz(selected,el){
-  if(document.querySelector('.quiz-option.clicked')) return;
-  clearTimeout(questionTimer);
-  if(el) el.classList.add('clicked');
-  if(selected===correctAnswer){
-    correctCount++; soundClap.play();
-    document.getElementById('quiz-feedback').textContent='✅ أحسنت!';
-  }else{
-    wrongCount++; soundWrong.play();
-    document.getElementById('quiz-feedback').textContent=`❌ خطأ! الصح هو ${fromNumber(correctAnswer)}`;
+// New helper function to add a score dot to the separate display
+const addScoreDot = (type) => {
+  const dot = document.createElement('div');
+  dot.classList.add('score-dot', type);
+  quizScoreDisplay.appendChild(dot);
+  // Trigger animation after appending
+  setTimeout(() => dot.classList.add('show'), 10);
+};
+
+function checkQuiz(selected, el) {
+  clearTimeout(quiz.questionTimer);
+  
+  // Disable all options after selection
+  document.querySelectorAll('.quiz-option').forEach(option => {
+    option.style.pointerEvents = 'none';
+  });
+
+  const allOptions = Array.from(quizOptionsDisplay.children);
+  
+  if (selected === quiz.correctAnswer) {
+    quiz.correctCount++;
+    if (el) el.classList.add('correct');
+    addScoreDot('correct'); // Add green dot to the separate score display
+    soundClap.play();
+    quizFeedbackDisplay.textContent = '✅ أحسنت!';
+  } else if (selected!== null) { // Wrong answer clicked
+    quiz.wrongCount++;
+    if (el) el.classList.add('wrong');
+    addScoreDot('wrong'); // Add red dot to the separate score display
+    soundWrong.play();
+    // Highlight the correct answer
+    const correctAnswerEl = allOptions.find(option => option.textContent == fromNumber(quiz.correctAnswer));
+    if (correctAnswerEl) correctAnswerEl.classList.add('correct');
+    quizFeedbackDisplay.textContent = `❌ خطأ! الإجابة الصحيحة هي ${fromNumber(quiz.correctAnswer)}`;
+  } else { // Timeout - no answer selected
+    quiz.wrongCount++; // Count as wrong if no answer
+    addScoreDot('timeout'); // Add yellow dot to the separate score display
+    soundWrong.play(); // Play wrong sound for timeout
+    quizFeedbackDisplay.textContent = `⏰ انتهى الوقت! الإجابة الصحيحة هي ${fromNumber(quiz.correctAnswer)}`;
+    // Highlight the correct answer even on timeout
+    const correctAnswerEl = allOptions.find(option => option.textContent == fromNumber(quiz.correctAnswer));
+    if (correctAnswerEl) correctAnswerEl.classList.add('correct');
   }
-  let percent=Math.round((correctCount/totalQuestions)*100);
-  document.getElementById('score-text').textContent=`✅ ${fromNumber(correctCount)} | ❌ ${fromNumber(wrongCount)} | ${percent}%`;
-  setTimeout(nextQuiz,500);
+
+  const percent = Math.round((quiz.correctCount / quiz.totalQuestions) * 100);
+  scoreTextDisplay.textContent = `✅ ${fromNumber(quiz.correctCount)} | ❌ ${fromNumber(quiz.wrongCount)} | ${percent}%`;
+  
+  setTimeout(nextQuiz, 1500); // Wait a bit longer for feedback
 }
 
-function animateBar(bar,duration){
-  let width=100;
-  let interval=50;
-  let decrement=100/(duration/interval);
-  let timer=setInterval(()=>{
-    width-=decrement;
-    bar.style.width=width+'%';
-    if(width<=0) clearInterval(timer);
-  },interval);
+function showQuizResult() {
+  const percent = Math.round((quiz.correctCount / quiz.totalQuestions) * 100);
+  let msg = '';
+  if (percent > 80) {
+    msg = '👍 رائع! جرب مستوى أصعب!';
+  } else if (percent > 50) {
+    msg = '✨ جيد! يمكنك التحسن.';
+  } else {
+    msg = '🔄 لا بأس، حاول مرة أخرى!';
+  }
+  
+  quizFeedbackDisplay.innerHTML = `
+    <p>لقد أنهيت الاختبار!</p>
+    <p>✅ ${fromNumber(quiz.correctCount)} من ${fromNumber(quiz.totalQuestions)} (${percent}%) - ${msg}</p>
+  `;
+  quizTimeBar.style.width = '0%';
 }
 
-function showQuizResult(){
-  let percent=Math.round((correctCount/totalQuestions)*100);
-  let msg= percent>80?'👍 رائع! جرب مستوى أصعب!' : '✨ حاول مرة أخرى!';
-  document.getElementById('quiz-feedback').textContent=`✅ ${fromNumber(correctCount)} من ${fromNumber(totalQuestions)} (${percent}%) - ${msg}`;
-  quizTimeBar.style.width='0%';
-}
-
-createNumberButtons(); switchLang(true); selectLevel('مبتدئ');
+// Initial setup
+createNumberButtons();
+switchLang(true); // Default to Arabic
+selectLevel('مبتدئ');
+openTab('tab-train', document.getElementById('tab-train-btn'));
 </script>
 
 </body>
