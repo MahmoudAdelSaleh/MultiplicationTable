@@ -411,8 +411,10 @@ function selectNumber(side, btn, num) {
 
 function showResult() {
   if (leftSelected && rightSelected) {
+    // تم تصحيح هذا السطر
     let ln = parseInt(leftSelected.textContent.replace(/[٠-٩]/g, d => '0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]));
-    let rn = parseInt(rightSelected.textContent.replace(/[٠-٩]/g, d => '0123456789'['٠١٢٣٤٥٦٩٨٩'.indexOf(d)]));
+    // تم تصحيح هذا السطر
+    let rn = parseInt(rightSelected.textContent.replace(/[٠-٩]/g, d => '0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]));
     resultDisplay.innerHTML = `<p>${fromNumber(ln)} × ${fromNumber(rn)} = ${fromNumber(ln * rn)}</p>`;
     if (window.showResultInterval) clearInterval(window.showResultInterval);
     timeBar.style.transition = 'none';
@@ -567,7 +569,7 @@ function showQuizResult() {
 function updateFooterName() {
   const userName = document.getElementById('userNameInput').value.trim();
   const footerContent = document.getElementById('footer-content');
-  
+
   if (userName) {
     footerContent.innerHTML = `<span class="footer-text">أهلاً بك يا ${userName}!</span>`;
   } else {
