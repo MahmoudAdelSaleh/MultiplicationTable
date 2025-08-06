@@ -5,10 +5,13 @@ self.addEventListener('install', e => {
         './',
         './index.html',
         './manifest.json',
+        './styles.css', // ملف CSS
         './clap.mp3',
         './wrong.mp3',
+        './true.mp3',  // ملف صوتي مفقود
         './icon-192.png',
-        './icon-512.png'
+        './icon-512.png',
+        './splash.png'  // صورة مفقودة
       ]);
     })
   );
