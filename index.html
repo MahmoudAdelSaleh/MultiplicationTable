@@ -83,11 +83,19 @@ body {
 .lang-btn.active { background: green; }
 .lang-btn.inactive { background: red; }
 #result {
-  font-size: 1.4em;
-  background: #222; color: #0f0; padding: 6px;
-  border-radius: 10px; margin: 10px auto;
-  width: 95%; max-width: 500px;
+  font-size: 2.5em;
+  background: #222;
+  color: #0f0;
+  padding: 10px; /* زيادة المساحة الداخلية */
+  border-radius: 10px;
+  margin: 10px auto;
+  width: 95%;
+  max-width: 500px;
   box-shadow: inset 0 0 8px #0f0, 0 0 10px rgba(0,0,0,0.4);
+  height: 80px; /* جعل الارتفاع ثابتًا */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .numbers-wrapper { display: flex; justify-content: center; align-items: center; margin: 10px 0; }
 .group-box {
