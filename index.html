@@ -141,20 +141,20 @@ body {
 .lang-btn.active { background: green; }
 .lang-btn.inactive { background: red; }
 #result {
-  font-size: 2.2em; /* زيادة حجم الناتج */
+  font-size: 5em; /* زيادة حجم الناتج */
   background: #222;
   color: #0f0;
-  padding: 12px;
+  padding: 5px;
   border-radius: 10px;
-  margin: 10px auto;
-  width: 95%;
+  margin: 8px ;
+  width: 100%;
   max-width: 500px;
   box-shadow: inset 0 0 8px #0f0, 0 0 10px rgba(0,0,0,0.4);
-  min-height: 50px; 
+  min-height: 40px; 
   display: flex;
   justify-content: center;
   align-items: center;
-  line-height: 1.3;
+  line-height: 1;
 }
 .numbers-wrapper { 
   display: flex; 
@@ -489,7 +489,7 @@ body {
     <button id="btn-ar" class="lang-btn active" onclick="switchLang(true)">١٢٣</button>
     <button id="btn-en" class="lang-btn inactive" onclick="switchLang(false)">123</button>
   </div>
-  <div id="result"><p>----</p></div>
+  <div id="result"><p> -  -  -  - </p></div>
   <div class="numbers-wrapper">
     <div class="group-box" id="left"></div>
     <div class="operator-box">×</div>
@@ -690,7 +690,7 @@ function resetScreen() {
   if (leftSelected) leftSelected.classList.remove('selected');
   if (rightSelected) rightSelected.classList.remove('selected');
   leftSelected = rightSelected = null;
-  resultDisplay.innerHTML = '<p>----</p>';
+  resultDisplay.innerHTML = '<p> -  -  -  - </p>';
   timeBar.style.transition = 'none';
   timeBar.style.width = '0%';
   if (window.showResultInterval) clearTimeout(window.showResultInterval);
