@@ -10,7 +10,6 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-VQYYZ3DM2Z');
 </script>
 <title>🎲 جدول الضرب للأطفال</title>
@@ -94,18 +93,19 @@ body {
   font-size: 1.3em;
   padding: 5px 12px;
   border-radius: 10px;
+  margin-bottom: 5px;
 }
 #tab-settings .setting-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   width: 100%;
 }
 #tab-settings label {
   width: 100%;
   text-align: center;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
   font-size: 0.9em;
 }
 #tab-settings input[type="range"],
@@ -114,10 +114,11 @@ body {
   width: 90%;
   max-width: 300px;
   padding: 8px;
-  font-size: 16px; /* منع التكبير على iOS */
+  font-size: 16px;
+  margin-bottom: 3px;
 }
 #tab-settings button {
-  margin-top: 5px;
+  margin-top: 3px;
   padding: 8px 12px;
 }
 .lang-toggle { 
@@ -140,16 +141,16 @@ body {
 .lang-btn.active { background: green; }
 .lang-btn.inactive { background: red; }
 #result {
-  font-size: 1.8em; 
+  font-size: 2.2em; /* زيادة حجم الناتج */
   background: #222;
   color: #0f0;
-  padding: 10px;
+  padding: 12px;
   border-radius: 10px;
   margin: 10px auto;
   width: 95%;
   max-width: 500px;
   box-shadow: inset 0 0 8px #0f0, 0 0 10px rgba(0,0,0,0.4);
-  min-height: 70px; 
+  min-height: 50px; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -168,18 +169,22 @@ body {
   border-radius: 10px; 
   padding: 5px;
   display: flex; 
-  flex-wrap: wrap; 
+  flex-direction: column; /* تغيير إلى عمودي */
   justify-content: center; 
-  max-width: 160px;
+  width: 120px; /* عرض ثابت للمستطيلات */
   margin: 0 5px;
+}
+.num-row {
+  display: flex;
+  justify-content: space-around;
+  margin: 3px 0;
 }
 .num {
   background: #1982c4; 
   color: white; 
   border-radius: 8px; 
-  margin: 3px;
-  width: 40px; 
-  height: 40px; 
+  width: 45px; 
+  height: 45px; 
   display: flex; 
   justify-content: center; 
   align-items: center;
@@ -205,6 +210,11 @@ body {
   margin: 0 10px;
   animation: rotateY 2s linear infinite;
   user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px; /* نفس ارتفاع الأرقام */
+  width: 45px; /* نفس عرض الأرقام */
 }
 @keyframes rotateY {
   0% { transform: rotateY(0deg); }
@@ -382,20 +392,26 @@ body {
   }
   
   #result {
-    font-size: 1.5em;
-    min-height: 60px;
-    padding: 8px;
+    font-size: 1.8em;
+    min-height: 70px;
+    padding: 10px;
   }
   
   .num {
-    width: 35px;
-    height: 35px;
-    font-size: 1em;
+    width: 40px;
+    height: 40px;
+    font-size: 1.1em;
   }
   
   .operator-box {
     font-size: 2em;
-    margin: 0 5px;
+    margin: 0 8px;
+    height: 40px;
+    width: 40px;
+  }
+  
+  .group-box {
+    width: 110px;
   }
   
   .quiz-option {
@@ -432,14 +448,21 @@ body {
 
 @media (max-width: 360px) {
   .group-box {
-    max-width: 140px;
+    width: 100px;
   }
   
   .num {
-    width: 30px;
-    height: 30px;
-    font-size: 0.9em;
+    width: 35px;
+    height: 35px;
+    font-size: 1em;
     margin: 2px;
+  }
+  
+  .operator-box {
+    font-size: 1.8em;
+    margin: 0 5px;
+    height: 35px;
+    width: 35px;
   }
   
   .quiz-option {
@@ -466,7 +489,7 @@ body {
     <button id="btn-ar" class="lang-btn active" onclick="switchLang(true)">١٢٣</button>
     <button id="btn-en" class="lang-btn inactive" onclick="switchLang(false)">123</button>
   </div>
-  <div id="result"><p>🥳 اختر الأرقام!</p></div>
+  <div id="result"><p>----</p></div>
   <div class="numbers-wrapper">
     <div class="group-box" id="left"></div>
     <div class="operator-box">×</div>
@@ -495,19 +518,19 @@ body {
   <div class="title-box">⚙️ الإعدادات</div>
   <div class="setting-item">
     <label>حجم العنوان</label>
-    <input type="range" min="1.5" max="4" step="0.1" value="2.2" onchange="document.querySelector('.title-box').style.fontSize=this.value+'em'">
+    <input type="range" min="1.5" max="4" step="0.1" value="1.6" onchange="document.querySelector('.title-box').style.fontSize=this.value+'em'">
   </div>
   <div class="setting-item">
     <label>حجم نص المسألة</label>
-    <input type="range" min="1.5" max="4" step="0.1" value="2.5" onchange="document.getElementById('result').style.fontSize=this.value+'em'">
+    <input type="range" min="1.5" max="4" step="0.1" value="2.2" onchange="document.getElementById('result').style.fontSize=this.value+'em'">
   </div>
   <div class="setting-item">
     <label>حجم نص السؤال</label>
-    <input type="range" min="1.5" max="3" step="0.1" value="2" onchange="document.getElementById('quiz-question').style.fontSize=this.value+'em'">
+    <input type="range" min="1.5" max="3" step="0.1" value="1.8" onchange="document.getElementById('quiz-question').style.fontSize=this.value+'em'">
   </div>
   <div class="setting-item">
     <label>حجم الأزرار</label>
-    <input type="range" min="1" max="3" step="0.1" value="1.8" onchange="document.querySelectorAll('.quiz-option').forEach(e=>e.style.fontSize=this.value+'em')">
+    <input type="range" min="1" max="3" step="0.1" value="1.5" onchange="document.querySelectorAll('.quiz-option').forEach(e=>e.style.fontSize=this.value+'em')">
   </div>
   <div class="setting-item">
     <label>اسم البطل</label>
@@ -516,7 +539,7 @@ body {
   </div>
   <div class="setting-item">
     <label>حجم النص المتحرك</label>
-    <input type="range" min="0.8" max="2" step="0.1" value="1.2" onchange="document.querySelector('.footer-content').style.fontSize=this.value+'em'">
+    <input type="range" min="0.8" max="2" step="0.1" value="1.1" onchange="document.querySelector('.footer-content').style.fontSize=this.value+'em'">
   </div>
   <div class="setting-item">
     <label>تغيير لون الخلفية</label>
@@ -602,14 +625,36 @@ function switchLang(arabic) {
 function createNumberButtons() {
   leftGroup.innerHTML = '';
   rightGroup.innerHTML = '';
-  for (let i = 1; i <= 10; i++) {
-    ['left', 'right'].forEach(side => {
-      let btn = document.createElement('div');
-      btn.className = 'num';
-      btn.textContent = fromNumber(i);
-      btn.addEventListener('click', () => selectNumber(side, btn, i));
-      (side === 'left'? leftGroup : rightGroup).appendChild(btn);
-    });
+  
+  // إنشاء 5 صفوف، كل صف يحتوي على رقمين
+  for (let row = 0; row < 5; row++) {
+    const leftRow = document.createElement('div');
+    leftRow.className = 'num-row';
+    
+    const rightRow = document.createElement('div');
+    rightRow.className = 'num-row';
+    
+    for (let col = 0; col < 2; col++) {
+      const leftNum = row * 2 + col + 1;
+      const rightNum = row * 2 + col + 1;
+      
+      // إنشاء أزرار للأرقام في الجانب الأيسر
+      let leftBtn = document.createElement('div');
+      leftBtn.className = 'num';
+      leftBtn.textContent = fromNumber(leftNum);
+      leftBtn.addEventListener('click', () => selectNumber('left', leftBtn, leftNum));
+      leftRow.appendChild(leftBtn);
+      
+      // إنشاء أزرار للأرقام في الجانب الأيمن
+      let rightBtn = document.createElement('div');
+      rightBtn.className = 'num';
+      rightBtn.textContent = fromNumber(rightNum);
+      rightBtn.addEventListener('click', () => selectNumber('right', rightBtn, rightNum));
+      rightRow.appendChild(rightBtn);
+    }
+    
+    leftGroup.appendChild(leftRow);
+    rightGroup.appendChild(rightRow);
   }
 }
 
@@ -627,9 +672,7 @@ function selectNumber(side, btn, num) {
 
 function showResult() {
   if (leftSelected && rightSelected) {
-    // تم تصحيح هذا السطر
     let ln = parseInt(leftSelected.textContent.replace(/[٠-٩]/g, d => '0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]));
-    // تم تصحيح هذا السطر
     let rn = parseInt(rightSelected.textContent.replace(/[٠-٩]/g, d => '0123456789'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]));
     resultDisplay.innerHTML = `<p>${fromNumber(ln)} × ${fromNumber(rn)} = ${fromNumber(ln * rn)}</p>`;
     if (window.showResultInterval) clearInterval(window.showResultInterval);
@@ -647,7 +690,7 @@ function resetScreen() {
   if (leftSelected) leftSelected.classList.remove('selected');
   if (rightSelected) rightSelected.classList.remove('selected');
   leftSelected = rightSelected = null;
-  resultDisplay.innerHTML = '<p>🥳 اختر الأرقام!</p>';
+  resultDisplay.innerHTML = '<p>----</p>';
   timeBar.style.transition = 'none';
   timeBar.style.width = '0%';
   if (window.showResultInterval) clearTimeout(window.showResultInterval);
@@ -789,7 +832,6 @@ function updateFooterName() {
   if (userName) {
     footerContent.innerHTML = `<span class="footer-text">أهلاً بك يا ${userName}!</span>`;
   } else {
-    // إذا كان الحقل فارغاً، نعود إلى الإعدادات الافتراضية
     footerContent.innerHTML = `
       <span class="footer-text">محمود عادل صالح - معلم رياضيات</span>
       <a href="https://m.facebook.com/barghouthean/" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="فيسبوك"></a>
